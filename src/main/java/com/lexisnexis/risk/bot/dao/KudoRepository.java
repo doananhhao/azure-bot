@@ -1,12 +1,11 @@
 package com.lexisnexis.risk.bot.dao;
 
 import com.lexisnexis.risk.bot.model.Kudo;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import com.lexisnexis.risk.bot.model.KudoPointTracking;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface KudoRepository extends MongoRepository<Kudo, String> {
+import java.util.List;
 
-    public Kudo findByMonthAndYear(int month, int year);
-
+public interface KudoRepository extends JpaRepository<Kudo, Long> {
+    Kudo findKudoByMonthEqualsAndYearEquals(int month, int year);
 }

@@ -1,46 +1,34 @@
 package com.lexisnexis.risk.bot.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
+import java.util.List;
 
-@Document(collection = "kudos")
+@Entity
+@Table(name = "kudo")
 public class Kudo {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private int day;
-
+    @Column(name = "month")
     private int month;
 
+    @Column(name = "year")
     private int year;
 
-    private int maximumPointPerUser;
+    @Column(name = "maximum_point")
+    private int maximumPoint;
 
-    public Kudo() {
-    }
+    @OneToMany
+    private List<KudoPointTracking> kudoPointTrackings;
 
-    public Kudo(int day, int month, int year, int maximumPointPerUser) {
-        this.day = day;
-        this.month = month;
-        this.year = year;
-        this.maximumPointPerUser = maximumPointPerUser;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
     }
 
     public int getMonth() {
@@ -59,11 +47,19 @@ public class Kudo {
         this.year = year;
     }
 
-    public int getMaximumPointPerUser() {
-        return maximumPointPerUser;
+    public int getMaximumPoint() {
+        return maximumPoint;
     }
 
-    public void setMaximumPointPerUser(int maximumPointPerUser) {
-        this.maximumPointPerUser = maximumPointPerUser;
+    public void setMaximumPoint(int maximumPoint) {
+        this.maximumPoint = maximumPoint;
+    }
+
+    public List<KudoPointTracking> getKudoPointTrackings() {
+        return kudoPointTrackings;
+    }
+
+    public void setKudoPointTrackings(List<KudoPointTracking> kudoPointTrackings) {
+        this.kudoPointTrackings = kudoPointTrackings;
     }
 }

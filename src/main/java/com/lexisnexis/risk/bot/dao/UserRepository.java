@@ -1,10 +1,8 @@
 package com.lexisnexis.risk.bot.dao;
 
 import com.lexisnexis.risk.bot.model.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends MongoRepository<User, String> {
-
-    public User findBySkypeId(String skypeId);
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }

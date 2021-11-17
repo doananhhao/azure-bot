@@ -71,40 +71,32 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>3.0.3.RELEASE</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
 
-
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-reactivestreams</artifactId>
-            <version>4.1.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>MyGet</id>
-            <url>${repo.url}</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>MyGet</id>-->
+<!--            <url>${repo.url}</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
-    <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <!--      <url>${repo.url}</url>-->
-            <url>https://oss.sonatype.org/</url>
-            <!--      <url>https://repo.maven.apache.org/maven2</url>-->
-        </repository>
-    </distributionManagement>
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>ossrh</id>-->
+<!--            &lt;!&ndash;      <url>${repo.url}</url>&ndash;&gt;-->
+<!--            <url>https://oss.sonatype.org/</url>-->
+<!--            &lt;!&ndash;      <url>https://repo.maven.apache.org/maven2</url>&ndash;&gt;-->
+<!--        </repository>-->
+<!--    </distributionManagement>-->
 
     <profiles>
         <profile>
