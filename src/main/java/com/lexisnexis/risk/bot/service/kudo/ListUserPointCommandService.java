@@ -44,7 +44,7 @@ public class ListUserPointCommandService implements CommandService<String> {
             List<CustomKudoPointTracking> customKudoPointTrackings = kudoPointTrackingRepository.getKudoPointByMonthAndYear(calendar.get(Calendar.MONTH - 1), calendar.get(Calendar.YEAR));
             if (!CollectionUtils.isEmpty(customKudoPointTrackings)) {
                 List<String> collect = customKudoPointTrackings.stream()
-                        .map(u -> String.format("**%s** earned: **%s**, remain: **%s**", u.getUsername(), u.getEarnedPoint(), u.getRemainPoint()))
+                        .map(u -> String.format("**%s** earned: **%s**, remain: **%s**", u.getUsername(), u.getEarnedPoint().toString(), u.getRemainPoint().toString()))
                         .collect(Collectors.toList());
                 return new Result<>(true, String.join("\n\n", collect));
             }
