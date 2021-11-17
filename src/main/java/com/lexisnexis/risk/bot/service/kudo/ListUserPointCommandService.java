@@ -34,7 +34,7 @@ public class ListUserPointCommandService implements CommandService<String> {
     @Override
     public boolean validate(String message) {
         return StringUtils.isNotEmpty(message)
-                && message.trim().equalsIgnoreCase(CommandConstants.KUDO_POINT_TRACKING.LIST_ALL);
+                && message.trim().endsWith(CommandConstants.KUDO_POINT_TRACKING.LIST_ALL);
     }
 
     @Override

@@ -37,13 +37,13 @@ public class SkypeBot extends ActivityHandler {
 
     @Override
     protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
-        if (turnContext.getActivity().removeRecipientMention().trim()
-                .equalsIgnoreCase(CommandConstants.HELP)) {
+        if (turnContext.getActivity().getText().trim()
+                .endsWith(CommandConstants.HELP)) {
             return sendMessage(turnContext, getHelp());
         }
         try {
             for (CommandService<?> commandService : commandServices) {
-                if (commandService.validate(turnContext.getActivity().removeRecipientMention())) {
+                if (commandService.validate(turnContext.getActivity().getText())) {
                     Result<?> result = commandService.execute(turnContext);
                     return sendMessage(turnContext, result);
                 }

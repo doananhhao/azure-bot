@@ -9,11 +9,13 @@ import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
 import com.microsoft.bot.builder.TurnContext;
+import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class PromptSubmitVoteCommandService implements CommandService {
@@ -39,29 +41,36 @@ public class PromptSubmitVoteCommandService implements CommandService {
         String skypeNameFrom = turnContext.getActivity().getFrom().getName();
         System.out.println("Kudo from: " + skypeNameFrom);
 
-        String skypeNameTo = turnContext.getActivity().getMentions().get(1).getText();
-        System.out.println("Kudo to: " + skypeNameTo);
+        List<Mention> mentionList = turnContext.getActivity().getMentions();
+        if (mentionList.size() < 2) {
+            return new Result<>(true, "Sorry, we cannot recognize who you want to kudo.");
+        } else if (mentionList.size() > 2) {
+            return new Result<>(true, "Sorry, you can only kudo one person at a time.");
+        } else {
+            String skypeNameTo = mentionList.get(1).getText();
+            System.out.println("Kudo to: " + skypeNameTo);
 
-        String text = turnContext.getActivity().getText();
-        String[] attributes = text.split(" ");
-        String pointAsString = attributes[attributes.length-1];
-        int point = Integer.parseInt(pointAsString);
-        System.out.println("Kudo with point: " + point);
+            String text = turnContext.getActivity().getText();
+            String[] attributes = text.split(" ");
+            String pointAsString = attributes[attributes.length - 1];
+            int point = Integer.parseInt(pointAsString);
+            System.out.println("Kudo with point: " + point);
 
-        //savePointTracking(from, to, point);
+            //savePointTracking(from, to, point);
 
-        StringBuilder resultString = new StringBuilder();
-        resultString.append("<at>" + skypeNameFrom + "</at>");
-        resultString.append(" ");
-        resultString.append("<at>@" + skypeNameFrom + "</at>");
-        resultString.append(" kudo ");
-        resultString.append(point);
-        resultString.append(" to ");
-        resultString.append(skypeNameTo);
-        resultString.append("!");
-        System.out.println("Return message: " + resultString);
+            StringBuilder resultString = new StringBuilder();
+            resultString.append("<at>" + skypeNameFrom + "</at>");
+            resultString.append(" ");
+            resultString.append("<at>@" + skypeNameFrom + "</at>");
+            resultString.append(" kudo ");
+            resultString.append(point);
+            resultString.append(" to ");
+            resultString.append(skypeNameTo);
+            resultString.append("!");
+            System.out.println("Return message: " + resultString);
 
-        return new Result<>(true, resultString.toString());
+            return new Result<>(true, resultString.toString());
+        }
     }
 
     private KudoPointTracking savePointTracking(String givenSkypeId, String pointedSkypeId, int point) {
