@@ -12,5 +12,5 @@ public class CommandConstants {
     public static final String KUDO_SOMEONE_OLD = "(@\\w*\\s){1}kudo\\s(@(\\w*)\\s){1}\\d*";
 
     // pattern: anybot kudo someone 10
-    public static final String KUDO_SOMEONE = "(.)*kudo\\s((\\w*)\\s)+\\d*";
+    public static final String KUDO_SOMEONE = "kudo\\s((\\w*)\\s)+\\d*";
 }

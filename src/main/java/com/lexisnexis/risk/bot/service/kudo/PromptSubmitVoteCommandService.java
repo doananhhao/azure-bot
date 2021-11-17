@@ -51,7 +51,9 @@ public class PromptSubmitVoteCommandService implements CommandService {
         //savePointTracking(from, to, point);
 
         StringBuilder resultString = new StringBuilder();
-        resultString.append(skypeNameFrom);
+        resultString.append("<at>" + skypeNameFrom + "</at>");
+        resultString.append(" ");
+        resultString.append("<at>@" + skypeNameFrom + "</at>");
         resultString.append(" kudo ");
         resultString.append(point);
         resultString.append(" to ");
