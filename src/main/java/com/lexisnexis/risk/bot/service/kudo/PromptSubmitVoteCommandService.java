@@ -34,17 +34,6 @@ public class PromptSubmitVoteCommandService implements CommandService {
 
     @Override
     public Result execute(TurnContext turnContext) {
-//        List<User> users = userRepository.findAll();
-//        Activity reply = MessageFactory.text("Which user do you want to kudo?");
-//        List<CardAction> cardActions = new ArrayList<>();
-//        for (User user : users) {
-//            cardActions.add(createUserCard(user.getUsername(), user.getSkypeId()));
-//        }
-//        SuggestedActions actions = new SuggestedActions();
-//        actions.setActions(cardActions);
-//        reply.setSuggestedActions(actions);
-//        return new Result<>(true, reply);
-
         List<Mention> mentions = turnContext.getActivity().getMentions();
         List<String> mentioned = new ArrayList<>();
         mentioned.add("==Result: ");
