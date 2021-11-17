@@ -9,14 +9,11 @@ import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
 import com.microsoft.bot.builder.TurnContext;
-import com.microsoft.bot.schema.Activity;
-import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Component
 public class PromptSubmitVoteCommandService implements CommandService {
@@ -39,17 +36,10 @@ public class PromptSubmitVoteCommandService implements CommandService {
 
     @Override
     public Result execute(TurnContext turnContext) {
-
-        Mention from = new Mention();
-        from.setMentioned(turnContext.getActivity().getFrom());
-        String skypeNameFrom = from.getText();
-        String skypeIdFrom = from.getMentioned().getId();
+        String skypeNameFrom = turnContext.getActivity().getFrom().getName();
         System.out.println("Kudo from: " + skypeNameFrom);
 
-        Mention to = turnContext.getActivity().getMentions().get(1);
-        String skypeNameTo = to.getText();
-        String skypeIdTo = to.getMentioned().getId();
-
+        String skypeNameTo = turnContext.getActivity().getMentions().get(1).getText();
         System.out.println("Kudo to: " + skypeNameTo);
 
         String text = turnContext.getActivity().getText();
@@ -59,6 +49,7 @@ public class PromptSubmitVoteCommandService implements CommandService {
         System.out.println("Kudo with point: " + point);
 
         //savePointTracking(from, to, point);
+
         StringBuilder resultString = new StringBuilder();
         resultString.append(skypeNameFrom);
         resultString.append(" kudo ");
@@ -66,11 +57,6 @@ public class PromptSubmitVoteCommandService implements CommandService {
         resultString.append(" to ");
         resultString.append(skypeNameTo);
         resultString.append("!");
-        resultString.append(" additional info:");
-        resultString.append(" skypeIdForm: ");
-        resultString.append(skypeIdFrom);
-        resultString.append(" skypeIdTo: ");
-        resultString.append(skypeIdTo);
         System.out.println("Return message: " + resultString);
 
         return new Result<>(true, resultString.toString());

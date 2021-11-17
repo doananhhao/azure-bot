@@ -48,10 +48,11 @@ public class SkypeBot extends ActivityHandler {
                     return sendMessage(turnContext, result);
                 }
             }
-            return super.onMessageActivity(turnContext);
         } catch (Exception e) {
             return sendMessage(turnContext, "Error: " + e.getMessage());
         }
+
+        return sendMessage(turnContext, "Sorry, I do not understand your command. Type \"help\" for assistance.");
     }
 
     private CompletableFuture<Void> sendMessage(TurnContext turnContext, Result<?> result) {
