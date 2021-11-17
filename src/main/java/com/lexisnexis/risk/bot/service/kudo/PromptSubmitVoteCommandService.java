@@ -1,16 +1,14 @@
 package com.lexisnexis.risk.bot.service.kudo;
 
+import com.google.gson.Gson;
 import com.lexisnexis.risk.bot.dao.UserRepository;
-import com.lexisnexis.risk.bot.model.User;
 import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
-import com.microsoft.bot.builder.MessageFactory;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.ActionTypes;
-import com.microsoft.bot.schema.Activity;
 import com.microsoft.bot.schema.CardAction;
-import com.microsoft.bot.schema.SuggestedActions;
+import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,21 +29,38 @@ public class PromptSubmitVoteCommandService implements CommandService {
 
     @Override
     public boolean validate(String message) {
-        return StringUtils.isNotEmpty(message) && message.trim().equalsIgnoreCase("kudo submit");
+        return StringUtils.isNotEmpty(message) && message.trim().contains("kudo submit");
     }
 
     @Override
     public Result execute(TurnContext turnContext) {
-        List<User> users = userRepository.findAll();
-        Activity reply = MessageFactory.text("Which user do you want to kudo?");
-        List<CardAction> cardActions = new ArrayList<>();
-        for (User user : users) {
-            cardActions.add(createUserCard(user.getUsername(), user.getSkypeId()));
+//        List<User> users = userRepository.findAll();
+//        Activity reply = MessageFactory.text("Which user do you want to kudo?");
+//        List<CardAction> cardActions = new ArrayList<>();
+//        for (User user : users) {
+//            cardActions.add(createUserCard(user.getUsername(), user.getSkypeId()));
+//        }
+//        SuggestedActions actions = new SuggestedActions();
+//        actions.setActions(cardActions);
+//        reply.setSuggestedActions(actions);
+//        return new Result<>(true, reply);
+
+        List<Mention> mentions = turnContext.getActivity().getMentions();
+        List<String> mentioned = new ArrayList<>();
+        mentioned.add("==Result: ");
+        for (Mention mention : mentions) {
+            mentioned.add(String.format("%s | %s | %s | %s",
+                    mention.getMentioned().getId(),
+                    mention.getMentioned().getName(),
+                    mention.getMentioned().getAadObjectId(),
+                    mention.getMentioned().getProperties()));
         }
-        SuggestedActions actions = new SuggestedActions();
-        actions.setActions(cardActions);
-        reply.setSuggestedActions(actions);
-        return new Result<>(true, reply);
+
+//        Get user who sent kudo action???
+//        turnContext.getActivity().getFrom();
+
+        return new Result<>(true,
+                turnContext.getActivity().getText() + "\n\n" + String.join("\n\n", mentioned));
     }
 
     private CardAction createUserCard(String userName, String skypeId) {
