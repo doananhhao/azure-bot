@@ -39,8 +39,11 @@ public class PromptSubmitVoteCommandService implements CommandService {
 
     @Override
     public Result execute(TurnContext turnContext) {
-        String skypeNameFrom = turnContext.getActivity().getText();
-        String skypeIdForm = turnContext.getActivity().getFrom().getId();
+
+        Mention from = new Mention();
+        from.setMentioned(turnContext.getActivity().getFrom());
+        String skypeNameFrom = from.getText();
+        String skypeIdFrom = from.getMentioned().getId();
         System.out.println("Kudo from: " + skypeNameFrom);
 
         Mention to = turnContext.getActivity().getMentions().get(1);
@@ -56,7 +59,6 @@ public class PromptSubmitVoteCommandService implements CommandService {
         System.out.println("Kudo with point: " + point);
 
         //savePointTracking(from, to, point);
-
         StringBuilder resultString = new StringBuilder();
         resultString.append(skypeNameFrom);
         resultString.append(" kudo ");
@@ -66,7 +68,7 @@ public class PromptSubmitVoteCommandService implements CommandService {
         resultString.append("!");
         resultString.append(" additional info:");
         resultString.append(" skypeIdForm: ");
-        resultString.append(skypeIdForm);
+        resultString.append(skypeIdFrom);
         resultString.append(" skypeIdTo: ");
         resultString.append(skypeIdTo);
         System.out.println("Return message: " + resultString);
