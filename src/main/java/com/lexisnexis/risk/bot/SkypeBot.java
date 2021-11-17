@@ -54,8 +54,6 @@ public class SkypeBot extends ActivityHandler {
         }
     }
 
-
-
     private CompletableFuture<Void> sendMessage(TurnContext turnContext, Result<?> result) {
         if (result.getData() instanceof Activity) {
             return turnContext
