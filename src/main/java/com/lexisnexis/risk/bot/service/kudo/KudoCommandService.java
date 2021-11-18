@@ -8,6 +8,7 @@ import com.lexisnexis.risk.bot.model.User;
 import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
+import com.lexisnexis.risk.bot.service.noname.KudoPointTrackingService;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,9 @@ public class KudoCommandService implements CommandService {
 
     @Autowired
     private KudoPointTrackingRepository kudoPointTrackingRepository;
+
+    @Autowired
+    private KudoPointTrackingService kudoPointTrackingService;
 
     @Override
     public HelpCommandObject getInstruction() {
@@ -73,23 +77,5 @@ public class KudoCommandService implements CommandService {
         }
     }
 
-    private KudoPointTracking savePointTracking(String givenSkypeId, String pointedSkypeId, int point) {
-        try {
-            //using id
-            //using user.findById...
-            User givenUser = new User();
-            givenUser.setSkypeId(givenSkypeId);
-            User pointedUser = new User();
-            pointedUser.setSkypeId(pointedSkypeId);
-            KudoPointTracking kudoPointTracking = new KudoPointTracking();
-            kudoPointTracking.setTime(LocalDateTime.now());
-            kudoPointTracking.setUser(givenUser);
-            kudoPointTracking.getPointedUser().setSkypeId(pointedSkypeId);
-            kudoPointTracking.setPoint(point);
-            return kudoPointTrackingRepository.save(kudoPointTracking);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
 
 }

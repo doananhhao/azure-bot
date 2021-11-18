@@ -1,46 +1,41 @@
-package com.lexisnexis.risk.bot.controller;
+package com.lexisnexis.risk.bot.service.noname;
 
 import com.lexisnexis.risk.bot.dao.KudoPointTrackingRepository;
+import com.lexisnexis.risk.bot.dao.KudoRepository;
 import com.lexisnexis.risk.bot.model.Kudo;
 import com.lexisnexis.risk.bot.model.KudoPointTracking;
 import com.lexisnexis.risk.bot.model.User;
-import com.lexisnexis.risk.bot.model.ct.CustomKudoPointTracking;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Calendar;
 
-@RestController
-public class KudoPointTrackingRestController {
+//This is temporarily => Will be structured
+@Service
+public class KudoPointTrackingServiceImpl implements KudoPointTrackingService{
 
     private final KudoPointTrackingRepository kudoPointTrackingRepository;
 
-    public KudoPointTrackingRestController(KudoPointTrackingRepository kudoPointTrackingRepository) {
+    private final KudoRepository kudoRepository;
+
+    public KudoPointTrackingServiceImpl(KudoPointTrackingRepository kudoPointTrackingRepository, KudoRepository kudoRepository) {
         this.kudoPointTrackingRepository = kudoPointTrackingRepository;
+        this.kudoRepository = kudoRepository;
     }
 
-
-    /*
-    Only for testing
-     */
-    @GetMapping
-    KudoPointTracking getTotalByMonthAndYear() {
-        return savePointTracking("skype_id1","skype_id2",20);
-    }
-
+    //This is temporarily => Will be structured
     @Transactional
-    KudoPointTracking savePointTracking(String givenSkypeId, String pointedSkypeId, int point) {
+    public KudoPointTracking savePointTracking(String givenSkypeId, String pointedSkypeId, int point) {
         try {
-            //using id
-            //using user.findById...
+            Calendar calendar = Calendar.getInstance();
+            //checking current kudo board using
+            Kudo kudo = kudoRepository.findKudoByMonthEqualsAndYearEquals(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+            //
             User givenUser = new User();
             givenUser.setSkypeId(givenSkypeId);
             User pointedUser = new User();
             pointedUser.setSkypeId(pointedSkypeId);
-            Kudo kudo = new Kudo();
-            kudo.setId(1L);
             KudoPointTracking kudoPointTracking = new KudoPointTracking();
             kudoPointTracking.setTime(LocalDateTime.now());
             kudoPointTracking.setUser(givenUser);
@@ -53,4 +48,5 @@ public class KudoPointTrackingRestController {
             return null;
         }
     }
+
 }

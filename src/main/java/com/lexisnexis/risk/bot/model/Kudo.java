@@ -20,7 +20,7 @@ public class Kudo {
     @Column(name = "maximum_point")
     private int maximumPoint;
 
-    @OneToMany
+    @OneToMany(mappedBy = "kudo")
     private List<KudoPointTracking> kudoPointTrackings;
 
     public Long getId() {
