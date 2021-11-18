@@ -9,6 +9,7 @@ import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
 import com.microsoft.bot.builder.TurnContext;
+import com.microsoft.bot.schema.Activity;
 import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ public class KudoCommandService implements CommandService {
             //savePointTracking(from, to, point);
 
             StringBuilder resultString = new StringBuilder();
+            resultString.append(skypeNameFrom);
+            resultString.append(" ");
             resultString.append("<at>" + skypeNameFrom + "</at>");
             resultString.append(" ");
             resultString.append("<at>@" + skypeNameFrom + "</at>");
@@ -69,7 +72,16 @@ public class KudoCommandService implements CommandService {
             resultString.append("!");
             System.out.println("Return message: " + resultString);
 
-            return new Result<>(true, resultString.toString());
+            Activity result = turnContext.getActivity().createReply();
+            turnContext.getActivity().getFrom();
+            Mention mentionForm = new Mention();
+            mentionForm.setMentioned(turnContext.getActivity().getFrom());
+            mentionForm.setText(skypeNameFrom);
+            mentionList.add(mentionForm);
+            result.setMentions(mentionList);
+            result.setText(resultString.toString());
+
+            return new Result<>(true, result);
         }
     }
 
