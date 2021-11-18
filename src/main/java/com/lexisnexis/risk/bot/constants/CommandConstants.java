@@ -12,5 +12,9 @@ public class CommandConstants {
     public static final String KUDO_SOMEONE_OLD = "(@\\w*\\s){1}kudo\\s(@(\\w*)\\s){1}\\d*";
 
     // pattern: anybot kudo someone 10
-    public static final String KUDO_SOMEONE = "(\\w)*(\\s)*kudo\\s((\\w*)\\s)+\\d*";
+    static String defaultLetter = "a-z0-9A-Z_\\-";
+    static String vietnameseLowerCaseLetter = "áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệóòỏõọôốồổỗộơớờởỡợíìỉĩịúùủũụưứừửữựýỳỷỹỵđ";
+    static String vietnameseUpperCaseLetter = "ÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆÓÒỎÕỌÔỐỒỔỖỘƠỜỚỞỠỢÍÌỈĨỊÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ";
+    public static final String KUDO_SOMEONE = "((\\w(\\-)*)*(\\s)*)*kudo\\s(([" + defaultLetter + vietnameseLowerCaseLetter + vietnameseUpperCaseLetter +"]*)\\s)+\\d*";
+
 }

@@ -37,22 +37,22 @@ public class SkypeBot extends ActivityHandler {
 
     @Override
     protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
-        if (turnContext.getActivity().getText().trim()
-                .endsWith(CommandConstants.HELP)) {
+        if (turnContext.getActivity().getText().trim().endsWith(CommandConstants.HELP)) {
             return sendMessage(turnContext, getHelp());
-        }
-        try {
-            for (CommandService<?> commandService : commandServices) {
-                if (commandService.validate(turnContext.getActivity().getText())) {
-                    Result<?> result = commandService.execute(turnContext);
-                    return sendMessage(turnContext, result);
+        } else {
+            try {
+                for (CommandService<?> commandService : commandServices) {
+                    if (commandService.validate(turnContext.getActivity().getText())) {
+                        Result<?> result = commandService.execute(turnContext);
+                        return sendMessage(turnContext, result);
+                    }
                 }
+            } catch (Exception e) {
+                return sendMessage(turnContext, "Error: " + e.getMessage());
             }
-        } catch (Exception e) {
-            return sendMessage(turnContext, "Error: " + e.getMessage());
-        }
 
-        return sendMessage(turnContext, "Sorry, I do not understand your command. Type \"help\" for assistance.");
+            return sendMessage(turnContext, "Sorry, I do not understand your command. Type \"help\" for assistance.");
+        }
     }
 
     private CompletableFuture<Void> sendMessage(TurnContext turnContext, Result<?> result) {

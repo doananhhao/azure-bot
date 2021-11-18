@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class PromptSubmitVoteCommandService implements CommandService {
+public class KudoCommandService implements CommandService {
 
     @Autowired
     private UserRepository userRepository;
