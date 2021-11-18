@@ -34,19 +34,24 @@ public class ListUserPointCommandService implements CommandService<String> {
     @Override
     public boolean validate(String message) {
         return StringUtils.isNotEmpty(message)
-                && message.trim().equalsIgnoreCase(CommandConstants.KUDO_POINT_TRACKING.LIST_ALL);
+                && message.trim().endsWith(CommandConstants.KUDO_POINT_TRACKING.LIST_ALL);
     }
 
     @Override
     public Result<String> execute(TurnContext turnContext) {
         Calendar calendar = Calendar.getInstance();
-        List<CustomKudoPointTracking> customKudoPointTrackings = kudoPointTrackingRepository.getKudoPointByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
-        if (!CollectionUtils.isEmpty(customKudoPointTrackings)) {
-            List<String> collect = customKudoPointTrackings.stream()
-                    .map(u -> String.format("**%s** earned: **%s**, remain: **%s**", u.getUsername(), u.getEarnedPoint(),u.getRemainPoint()))
-                    .collect(Collectors.toList());
-            return new Result<>(true, String.join("\n\n", collect));
+        try {
+            List<CustomKudoPointTracking> customKudoPointTrackings = kudoPointTrackingRepository.getKudoPointByMonthAndYear(calendar.get(Calendar.MONTH - 1), calendar.get(Calendar.YEAR));
+            if (!CollectionUtils.isEmpty(customKudoPointTrackings)) {
+                List<String> collect = customKudoPointTrackings.stream()
+                        .map(u -> String.format("**%s** earned: **%s**, remain: **%s**", u.getUsername(), u.getEarnedPoint().toString(), u.getRemainPoint().toString()))
+                        .collect(Collectors.toList());
+                return new Result<>(true, String.join("\n\n", collect));
+            }
+        } catch (Exception ex) {
+            return new Result<>(true, "lỗi rồi nhé baby!" + ex.getMessage());
         }
-        return new Result<>();
+
+        return new Result<>(true, "hẻm có gì hết, return default nè baby");
     }
 }
