@@ -22,6 +22,8 @@ public class KudoPointTrackingRestController {
      */
     @GetMapping
     List<CustomKudoPointTracking> getTotalByMonthAndYear() {
-        return kudoPointTrackingRepository.getKudoPointByMonthAndYear(11,2021);
+        List<CustomKudoPointTracking> customKudoPointTrackings =
+            kudoPointTrackingRepository.getKudoPointByMonthAndYear(11,2021);
+        return customKudoPointTrackings;
     }
 }

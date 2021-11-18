@@ -4,10 +4,13 @@ import com.lexisnexis.risk.bot.model.KudoPointTracking;
 import com.lexisnexis.risk.bot.model.ct.CustomKudoPointTracking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface KudoPointTrackingRepository extends JpaRepository<KudoPointTracking, Long> {
+
+    @Transactional
     @Query(value = "select A.username, earned_point as earnedPoint, ((select distinct(maximum_point) from kudo where month = :month and year = :year) - given_point) as remainPoint from\n" +
             "(select username, COALESCE(sum(point),0) as given_point\n" +
             "from users left join (select * from kudo_point_tracking where EXTRACT(MONTH FROM time) = :month and EXTRACT(YEAR from time) = :year) as kpt on users.id = kpt.user_id\n" +
