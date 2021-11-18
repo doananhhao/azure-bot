@@ -32,9 +32,9 @@ public class KudoPointTrackingRestController {
     Only for testing
      */
     @GetMapping
-    KudoPointTracking getTotalByMonthAndYear() {
-        return kudoCommandService.savePointTracking("skype_id1","A","skype_id2","B",20);
-//        return userService.saveUser(new User("skype_id4","Hellorr"));
+    User getTotalByMonthAndYear() {
+//        return kudoCommandService.savePointTracking("skype_id1","A","skype_id2","B",20);
+        return userService.saveUser(new User("skype_id4","Hellorr"));
     }
 
 

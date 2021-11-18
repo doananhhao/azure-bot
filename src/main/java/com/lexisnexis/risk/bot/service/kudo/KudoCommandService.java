@@ -82,7 +82,7 @@ public class KudoCommandService implements CommandService {
     }
 
     //handle exception
-    public KudoPointTracking savePointTracking(String givenSkypeId, String givenSkypeName, String pointedSkypeId, String pointedSkypeName, int point) {
+    private KudoPointTracking savePointTracking(String givenSkypeId, String givenSkypeName, String pointedSkypeId, String pointedSkypeName, int point) {
         User givenUser = userService.saveUser(new User(givenSkypeId, givenSkypeName));
         User pointedUser = userService.saveUser(new User(pointedSkypeId, pointedSkypeName));
         return kudoPointTrackingService.savePointTracking(givenUser.getSkypeId(), givenUser.getSkypeName(), pointedUser.getSkypeId(), pointedUser.getSkypeName(), point);
