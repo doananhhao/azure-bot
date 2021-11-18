@@ -10,24 +10,31 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "skypeId")
+    @Column(name = "skype_id")
     private String skypeId;
 
-    @OneToOne(mappedBy = "pointedUser")
-    @JsonIgnore
-    private KudoPointTracking kudoPointTracking;
+    @Column(name = "skype_name")
+    private String skypeName;
 
-    @OneToMany(mappedBy = "user")
+//    @OneToOne(mappedBy = "pointedUser", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private KudoPointTracking kudoPointTracking;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<KudoPointTracking> kudoPointTrackings;
+
+    public User() {
+    }
+
+    public User(String skypeId) {
+        this.skypeId = skypeId;
+    }
+
+    public User(String skypeId, String skypeName) {
+        this.skypeId = skypeId;
+        this.skypeName = skypeName;
+    }
 
     public List<KudoPointTracking> getKudoPointTrackings() {
         return kudoPointTrackings;
@@ -37,30 +44,6 @@ public class User {
         this.kudoPointTrackings = kudoPointTrackings;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getSkypeId() {
         return skypeId;
     }
@@ -68,4 +51,20 @@ public class User {
     public void setSkypeId(String skypeId) {
         this.skypeId = skypeId;
     }
+
+    public String getSkypeName() {
+        return skypeName;
+    }
+
+    public void setSkypeName(String skypeName) {
+        this.skypeName = skypeName;
+    }
+
+//    public KudoPointTracking getKudoPointTracking() {
+//        return kudoPointTracking;
+//    }
+//
+//    public void setKudoPointTracking(KudoPointTracking kudoPointTracking) {
+//        this.kudoPointTracking = kudoPointTracking;
+//    }
 }

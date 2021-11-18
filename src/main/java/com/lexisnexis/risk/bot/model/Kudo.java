@@ -1,11 +1,14 @@
 package com.lexisnexis.risk.bot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "kudo")
 public class Kudo {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +23,8 @@ public class Kudo {
     @Column(name = "maximum_point")
     private int maximumPoint;
 
-    @OneToMany
+    @OneToMany(mappedBy = "kudo", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<KudoPointTracking> kudoPointTrackings;
 
     public Long getId() {
@@ -62,4 +66,6 @@ public class Kudo {
     public void setKudoPointTrackings(List<KudoPointTracking> kudoPointTrackings) {
         this.kudoPointTrackings = kudoPointTrackings;
     }
+
+
 }

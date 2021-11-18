@@ -1,7 +1,7 @@
 package com.lexisnexis.risk.bot.model.ct;
 
 public interface CustomKudoPointTracking {
-    String getUsername();
+    String getSkypeName();
     long getEarnedPoint();
     long getRemainPoint();
 }
