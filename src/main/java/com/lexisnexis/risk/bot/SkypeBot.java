@@ -48,6 +48,7 @@ public class SkypeBot extends ActivityHandler {
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 return sendMessage(turnContext, "Error: " + e.getMessage());
             }
 
