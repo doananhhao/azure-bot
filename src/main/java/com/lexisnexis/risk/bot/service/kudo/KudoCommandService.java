@@ -10,6 +10,7 @@ import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.Activity;
+import com.microsoft.bot.schema.Entity;
 import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,9 @@ public class KudoCommandService implements CommandService {
     @Override
     public Result execute(TurnContext turnContext) {
         String skypeNameFrom = turnContext.getActivity().getFrom().getName();
-        System.out.println("Kudo from: " + skypeNameFrom);
+        String skypeIdFrom = turnContext.getActivity().getFrom().getId();
+        String fromAsText = "<at id=\"" + skypeIdFrom + "\">" + skypeNameFrom + "</at>";
+        System.out.println("Kudo from: " + fromAsText);
 
         List<Mention> mentionList = turnContext.getActivity().getMentions();
         if (mentionList.size() < 2) {
@@ -48,8 +51,8 @@ public class KudoCommandService implements CommandService {
         } else if (mentionList.size() > 2) {
             return new Result<>(true, "Sorry, you can only kudo one person at a time.");
         } else {
-            String skypeNameTo = mentionList.get(1).getText();
-            System.out.println("Kudo to: " + skypeNameTo);
+            String toAsText = mentionList.get(1).getText();
+            System.out.println("Kudo to: " + toAsText);
 
             String text = turnContext.getActivity().getText();
             String[] attributes = text.split(" ");
@@ -60,26 +63,21 @@ public class KudoCommandService implements CommandService {
             //savePointTracking(from, to, point);
 
             StringBuilder resultString = new StringBuilder();
-            resultString.append(skypeNameFrom);
-            resultString.append(" ");
-            resultString.append("<at>" + skypeNameFrom + "</at>");
-            resultString.append(" ");
-            resultString.append("<at>@" + skypeNameFrom + "</at>");
+            resultString.append(fromAsText);
             resultString.append(" kudo ");
             resultString.append(point);
             resultString.append(" to ");
-            resultString.append(skypeNameTo);
+            resultString.append(toAsText);
             resultString.append("!");
             System.out.println("Return message: " + resultString);
 
-            Activity result = turnContext.getActivity().createReply();
-            turnContext.getActivity().getFrom();
+            Activity result = turnContext.getActivity().createReply(resultString.toString());
+
             Mention mentionForm = new Mention();
             mentionForm.setMentioned(turnContext.getActivity().getFrom());
-            mentionForm.setText(skypeNameFrom);
+            mentionForm.setText(fromAsText);
             mentionList.add(mentionForm);
             result.setMentions(mentionList);
-            result.setText(resultString.toString());
 
             return new Result<>(true, result);
         }

@@ -37,6 +37,7 @@ public class SkypeBot extends ActivityHandler {
 
     @Override
     protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
+        System.out.println(turnContext.getActivity().getText());
         if (turnContext.getActivity().getText().trim().endsWith(CommandConstants.HELP)) {
             return sendMessage(turnContext, getHelp());
         } else {
