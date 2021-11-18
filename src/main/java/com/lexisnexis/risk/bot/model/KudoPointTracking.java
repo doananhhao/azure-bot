@@ -1,5 +1,7 @@
 package com.lexisnexis.risk.bot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

@@ -4,21 +4,27 @@ import com.lexisnexis.risk.bot.dao.KudoPointTrackingRepository;
 import com.lexisnexis.risk.bot.model.Kudo;
 import com.lexisnexis.risk.bot.model.KudoPointTracking;
 import com.lexisnexis.risk.bot.model.User;
-import com.lexisnexis.risk.bot.model.ct.CustomKudoPointTracking;
+import com.lexisnexis.risk.bot.service.kudo.KudoCommandService;
+import com.lexisnexis.risk.bot.service.noname.UserService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 public class KudoPointTrackingRestController {
 
     private final KudoPointTrackingRepository kudoPointTrackingRepository;
 
-    public KudoPointTrackingRestController(KudoPointTrackingRepository kudoPointTrackingRepository) {
+    private final KudoCommandService kudoCommandService;
+
+    private final UserService userService;
+
+    public KudoPointTrackingRestController(KudoPointTrackingRepository kudoPointTrackingRepository, KudoCommandService kudoCommandService, UserService userService) {
         this.kudoPointTrackingRepository = kudoPointTrackingRepository;
+        this.kudoCommandService = kudoCommandService;
+        this.userService = userService;
     }
 
 
@@ -27,8 +33,10 @@ public class KudoPointTrackingRestController {
      */
     @GetMapping
     KudoPointTracking getTotalByMonthAndYear() {
-        return savePointTracking("skype_id1","skype_id2",20);
+        return kudoCommandService.savePointTracking("skype_id1","A","skype_id2","B",20);
+//        return userService.saveUser(new User("skype_id4","Hellorr"));
     }
+
 
     @Transactional
     KudoPointTracking savePointTracking(String givenSkypeId, String pointedSkypeId, int point) {

@@ -9,6 +9,7 @@ import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
 import com.lexisnexis.risk.bot.service.CommandService;
 import com.lexisnexis.risk.bot.service.noname.KudoPointTrackingService;
+import com.lexisnexis.risk.bot.service.noname.UserService;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.Mention;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,9 @@ public class KudoCommandService implements CommandService {
 
     @Autowired
     private KudoPointTrackingService kudoPointTrackingService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public HelpCommandObject getInstruction() {
@@ -77,5 +81,11 @@ public class KudoCommandService implements CommandService {
         }
     }
 
+    //handle exception
+    public KudoPointTracking savePointTracking(String givenSkypeId, String givenSkypeName, String pointedSkypeId, String pointedSkypeName, int point) {
+        User givenUser = userService.saveUser(new User(givenSkypeId, givenSkypeName));
+        User pointedUser = userService.saveUser(new User(pointedSkypeId, pointedSkypeName));
+        return kudoPointTrackingService.savePointTracking(givenUser.getSkypeId(), givenUser.getSkypeName(), pointedUser.getSkypeId(), pointedUser.getSkypeName(), point);
+    }
 
 }
