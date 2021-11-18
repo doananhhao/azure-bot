@@ -15,6 +15,6 @@ public class CommandConstants {
     static String defaultLetter = "a-z0-9A-Z_\\-";
     static String vietnameseLowerCaseLetter = "áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệóòỏõọôốồổỗộơớờởỡợíìỉĩịúùủũụưứừửữựýỳỷỹỵđ";
     static String vietnameseUpperCaseLetter = "ÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆÓÒỎÕỌÔỐỒỔỖỘƠỜỚỞỠỢÍÌỈĨỊÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ";
-    public static final String KUDO_SOMEONE = "((\\w(\\-)*)*(\\s)*)*kudo\\s(([" + defaultLetter + vietnameseLowerCaseLetter + vietnameseUpperCaseLetter +"]*)\\s)+\\d*";
+    public static final String KUDO_SOMEONE = "(@*(\\w(\\-)*)*(\\s)*)*kudo\\s(@*([" + defaultLetter + vietnameseLowerCaseLetter + vietnameseUpperCaseLetter +"]*)\\s)+\\d*";
 
 }

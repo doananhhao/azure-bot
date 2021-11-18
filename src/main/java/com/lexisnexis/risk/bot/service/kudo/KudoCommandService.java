@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -46,17 +45,27 @@ public class KudoCommandService implements CommandService {
 
     @Override
     public Result execute(TurnContext turnContext) {
-        String skypeNameFrom = turnContext.getActivity().getFrom().getName();
-        System.out.println("Kudo from: " + skypeNameFrom);
-
         List<Mention> mentionList = turnContext.getActivity().getMentions();
         if (mentionList.size() < 2) {
             return new Result<>(true, "Sorry, we cannot recognize who you want to kudo.");
         } else if (mentionList.size() > 2) {
             return new Result<>(true, "Sorry, you can only kudo one person at a time.");
         } else {
-            String skypeNameTo = mentionList.get(1).getText();
-            System.out.println("Kudo to: " + skypeNameTo);
+            String skypeIdFrom = turnContext.getActivity().getFrom().getId();
+            String skypeNameFrom = turnContext.getActivity().getFrom().getName();
+            String skypeTextFrom = new StringBuilder()
+                    .append("<at id=\"")
+                    .append(skypeIdFrom)
+                    .append("\">")
+                    .append(skypeNameFrom)
+                    .append("</at>").toString();
+            System.out.println("Kudo from: " + skypeTextFrom);
+
+            Mention mentionTo = mentionList.get(1);
+            String skypeTextTo = mentionTo.getText();
+            String skypeIdTo = mentionTo.getMentioned().getId();
+            String skypeNameTo = mentionTo.getMentioned().getName();
+            System.out.println("Kudo to: " + skypeTextTo);
 
             String text = turnContext.getActivity().getText();
             String[] attributes = text.split(" ");
@@ -64,18 +73,20 @@ public class KudoCommandService implements CommandService {
             int point = Integer.parseInt(pointAsString);
             System.out.println("Kudo with point: " + point);
 
-            //savePointTracking(from, to, point);
+            KudoPointTracking kudo = savePointTracking(skypeIdFrom, skypeNameFrom, skypeIdTo, skypeNameTo, point);
 
             StringBuilder resultString = new StringBuilder();
-            resultString.append("<at>" + skypeNameFrom + "</at>");
-            resultString.append(" ");
-            resultString.append("<at>@" + skypeNameFrom + "</at>");
-            resultString.append(" kudo ");
-            resultString.append(point);
-            resultString.append(" to ");
-            resultString.append(skypeNameTo);
-            resultString.append("!");
-            System.out.println("Return message: " + resultString);
+            if (kudo != null) {
+                resultString.append(skypeTextFrom);
+                resultString.append(" kudo ");
+                resultString.append(point);
+                resultString.append(" to ");
+                resultString.append(skypeTextTo);
+                resultString.append("!");
+                System.out.println("Return message: " + resultString);
+            } else {
+                resultString.append("Error: cannot save to database!");
+            }
 
             return new Result<>(true, resultString.toString());
         }
@@ -83,9 +94,14 @@ public class KudoCommandService implements CommandService {
 
     //handle exception
     private KudoPointTracking savePointTracking(String givenSkypeId, String givenSkypeName, String pointedSkypeId, String pointedSkypeName, int point) {
-        User givenUser = userService.saveUser(new User(givenSkypeId, givenSkypeName));
-        User pointedUser = userService.saveUser(new User(pointedSkypeId, pointedSkypeName));
-        return kudoPointTrackingService.savePointTracking(givenUser.getSkypeId(), givenUser.getSkypeName(), pointedUser.getSkypeId(), pointedUser.getSkypeName(), point);
+        try {
+            User givenUser = userService.saveUser(new User(givenSkypeId, givenSkypeName));
+            User pointedUser = userService.saveUser(new User(pointedSkypeId, pointedSkypeName));
+            return kudoPointTrackingService.savePointTracking(givenUser.getSkypeId(), givenUser.getSkypeName(), pointedUser.getSkypeId(), pointedUser.getSkypeName(), point);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -2,8 +2,6 @@ package com.lexisnexis.risk.bot.service.kudo;
 
 import com.lexisnexis.risk.bot.constants.CommandConstants;
 import com.lexisnexis.risk.bot.dao.KudoPointTrackingRepository;
-import com.lexisnexis.risk.bot.model.KudoPointTracking;
-import com.lexisnexis.risk.bot.model.User;
 import com.lexisnexis.risk.bot.model.ct.CustomKudoPointTracking;
 import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +53,12 @@ public class ListUserPointCommandService implements CommandService<String> {
             List<CustomKudoPointTracking> customKudoPointTrackings = kudoPointTrackingRepository.getKudoPointByMonthAndYear(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
             if (!CollectionUtils.isEmpty(customKudoPointTrackings)) {
                 List<String> collect = customKudoPointTrackings.stream()
+                        .sorted(new Comparator<CustomKudoPointTracking>() {
+                            @Override
+                            public int compare(CustomKudoPointTracking o1, CustomKudoPointTracking o2) {
+                                return (int) o2.getEarnedPoint() - (int) o1.getEarnedPoint();
+                            }
+                        })
                         .map(u -> String.format("**%s** earned: %d, remain: %d", u.getSkypeName(), u.getEarnedPoint(), u.getRemainPoint()))
                         .collect(Collectors.toList());
                 return new Result<>(true, String.join("\n\n", collect));

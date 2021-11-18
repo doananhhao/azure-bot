@@ -13,6 +13,8 @@ public class KudoCommandServiceTests {
         boolean pass4 = service.validate("Bot backup kudo Duong 10");
         boolean pass5 = service.validate("ilaam_kudo_bot kudo Duong 10");
         boolean pass6 = service.validate("ilaam-kudo-bot kudo ilaam-kudo-bot 10");
+        boolean pass7 = service.validate("@ilaam-kudo-bot kudo @Đức 10");
+        boolean pass8 = service.validate("@ilaam bot kudo @Đức 10");
         boolean fail1 = service.validate("list something someone 10");
         boolean fail2 = service.validate("kudo something someone");
         boolean fail3 = service.validate("list");
@@ -23,6 +25,8 @@ public class KudoCommandServiceTests {
         Assert.assertTrue(pass4);
         Assert.assertTrue(pass5);
         Assert.assertTrue(pass6);
+        Assert.assertTrue(pass7);
+        Assert.assertTrue(pass8);
         Assert.assertFalse(fail1);
         Assert.assertFalse(fail2);
         Assert.assertFalse(fail3);
