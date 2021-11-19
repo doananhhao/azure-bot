@@ -1,7 +1,7 @@
 package com.lexisnexis.risk.bot.dao;
 
 import com.lexisnexis.risk.bot.model.KudoPointTracking;
-import com.lexisnexis.risk.bot.model.ct.CustomKudoPointTracking;
+import com.lexisnexis.risk.bot.model.vm.CustomKudoPointTracking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;

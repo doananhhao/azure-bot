@@ -1,10 +1,7 @@
 package com.lexisnexis.risk.bot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "kudo_point_tracking")
@@ -31,6 +28,17 @@ public class KudoPointTracking {
     @ManyToOne
     @JoinColumn(name = "kudo_id")
     private Kudo kudo;
+
+    public KudoPointTracking() {
+    }
+
+    public KudoPointTracking(User user, User pointedUser, int point, Kudo kudo) {
+        this.time = LocalDateTime.now();
+        this.user = user;
+        this.pointedUser = pointedUser;
+        this.point = point;
+        this.kudo = kudo;
+    }
 
     public Long getId() {
         return id;

@@ -3,10 +3,8 @@
 
 package com.lexisnexis.risk.bot;
 
-import com.lexisnexis.risk.bot.service.CommandService;
+import com.lexisnexis.risk.bot.service.kudo.CommandService;
 import com.microsoft.bot.builder.Bot;
-import com.microsoft.bot.builder.ConversationState;
-import com.microsoft.bot.builder.UserState;
 import com.microsoft.bot.integration.AdapterWithErrorHandler;
 import com.microsoft.bot.integration.BotFrameworkHttpAdapter;
 import com.microsoft.bot.integration.Configuration;
@@ -53,8 +51,8 @@ public class Application extends BotDependencyConfiguration {
      * @return The Bot implementation for this application.
      */
     @Bean
-    public Bot getBot(UserState userState, ConversationState conversationState, List<CommandService> commandServices) {
-        return new SkypeBot(userState, conversationState, commandServices);
+    public Bot getBot(List<CommandService> commandServices) {
+        return new SkypeBot(commandServices);
     }
 
     /**
