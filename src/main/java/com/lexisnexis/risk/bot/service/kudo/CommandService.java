@@ -1,4 +1,4 @@
-package com.lexisnexis.risk.bot.service;
+package com.lexisnexis.risk.bot.service.kudo;
 
 import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;

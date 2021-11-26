@@ -2,14 +2,18 @@ package com.lexisnexis.risk.bot;
 
 import com.codepoetics.protonpack.collectors.CompletableFutures;
 import com.lexisnexis.risk.bot.constants.CommandConstants;
-import com.lexisnexis.risk.bot.constants.StyleTemplate;
+import com.lexisnexis.risk.bot.constants.SkypeConstants;
 import com.lexisnexis.risk.bot.model.vm.HelpCommandObject;
 import com.lexisnexis.risk.bot.model.vm.Result;
-import com.lexisnexis.risk.bot.service.CommandService;
-import com.microsoft.bot.builder.*;
+import com.lexisnexis.risk.bot.service.kudo.CommandService;
+import com.microsoft.bot.builder.ActivityHandler;
+import com.microsoft.bot.builder.MessageFactory;
+import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.Activity;
 import com.microsoft.bot.schema.ChannelAccount;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -25,13 +29,10 @@ import java.util.concurrent.CompletableFuture;
  */
 public class SkypeBot extends ActivityHandler {
 
-    private final BotState userState;
-    private final BotState conversationState;
+    private final Logger LOG = LoggerFactory.getLogger(SkypeBot.class);
     private List<CommandService> commandServices;
 
-    public SkypeBot(UserState userState, ConversationState conversationState, List<CommandService> commandServices) {
-        this.userState = userState;
-        this.conversationState = conversationState;
+    public SkypeBot(List<CommandService> commandServices) {
         this.commandServices = commandServices;
     }
 
@@ -48,7 +49,7 @@ public class SkypeBot extends ActivityHandler {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.error("Cannot execute command", e);
                 return sendMessage(turnContext, "Error: " + e.getMessage());
             }
 
@@ -75,10 +76,10 @@ public class SkypeBot extends ActivityHandler {
         StringBuilder response = new StringBuilder();
         for (CommandService<?> commandService : commandServices) {
             HelpCommandObject instruction = commandService.getInstruction();
-            response.append(String.format(StyleTemplate.ITALIC + " ===> %s\n\n",
+            response.append(String.format(SkypeConstants.ITALIC + " ===> %s\n\n",
                     instruction.getCommand(), instruction.getDescription()));
         }
-        response.append(String.format("\n\n" + StyleTemplate.BOLD + ": %s",
+        response.append(String.format("\n\n" + SkypeConstants.BOLD + ": %s",
                 CommandConstants.HELP, "To list all commands"));
         return response.toString();
     }
